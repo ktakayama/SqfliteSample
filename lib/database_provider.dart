@@ -20,3 +20,26 @@ class DatabaseProvider {
     );
   }
 }
+
+class DatabaseProvider2 {
+  static final _instance = DatabaseProvider2._privateConstructor();
+  static DatabaseProvider2 shared = _instance;
+
+  late Database db;
+
+  DatabaseProvider2._privateConstructor() {
+    _init();
+  }
+
+  _init() async {
+    db = await openDatabase(
+      'doggie_database.db',
+      onCreate: (db, version) {
+        return db.execute(
+          'CREATE TABLE dogs(id INTEGER PRIMARY KEY, name TEXT, age INTEGER)',
+        );
+      },
+      version: 1,
+    );
+  }
+}
