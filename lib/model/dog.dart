@@ -1,4 +1,5 @@
 import 'package:sqflite_sample/database/dao.dart';
+import 'package:sqflite_sample/database/database_repository.dart';
 
 class Dog implements Model {
   @override
@@ -43,4 +44,8 @@ class DogDao implements Dao<Dog> {
     }
     return dogs;
   }
+}
+
+class DogRepository extends DatabaseRepository<DogDao, Dog> {
+  DogRepository(databaseProvider) : super(DogDao(), databaseProvider);
 }

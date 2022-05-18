@@ -53,8 +53,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var _dogs = <Dog>[];
-  final _repository =
-      DatabaseRepository<DogDao, Dog>(DogDao(), DatabaseProvider.shared);
+  final _repository = DogRepository(DatabaseProvider.shared);
 
   _addDog() {
     var rand = math.Random();
