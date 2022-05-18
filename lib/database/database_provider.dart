@@ -10,11 +10,12 @@ class DatabaseProvider {
 
   Future<Database> db() async {
     return _db ??= await openDatabase(
-      'doggie_database.db',
+      'database.db',
       onCreate: (db, version) {
-        return db.execute(
-          'CREATE TABLE dogs(id INTEGER PRIMARY KEY, name TEXT, age INTEGER)',
-        );
+        db.execute(
+            'CREATE TABLE dog(id INTEGER PRIMARY KEY, name TEXT, age INTEGER)');
+        db.execute(
+            'CREATE TABLE cat(id INTEGER PRIMARY KEY, name TEXT, age INTEGER)');
       },
       version: 1,
     );
