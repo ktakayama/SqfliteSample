@@ -1,5 +1,5 @@
 import 'package:sqflite_sample/database/dao.dart';
-import 'package:sqflite_sample/database_provider.dart';
+import 'package:sqflite_sample/database/database_provider.dart';
 
 class DatabaseRepository<T extends Dao<Y>, Y extends Model> {
   final T dao;

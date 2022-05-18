@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite_sample/database_provider.dart';
+import 'package:sqflite_sample/database/database_provider.dart';
 import 'package:sqflite_sample/database/database_repository.dart';
 import 'package:sqflite_sample/model/dog.dart';
 import 'dart:math' as math;
