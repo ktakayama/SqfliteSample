@@ -16,11 +16,12 @@ class Dog implements Model {
 
 class DogDao implements Dao<Dog> {
   @override
-  var tableName = 'dogs';
-  @override
   var columnId = 'id';
   final _columnName = 'name';
   final _columnAge = 'age';
+
+  @override
+  var tableName = (Dog).toString().toLowerCase();
 
   @override
   Dog fromMap(Map<dynamic, dynamic> query) {
