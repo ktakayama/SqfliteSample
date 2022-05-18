@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite_sample/database_provider.dart';
+import 'package:sqflite_sample/database/database_repository.dart';
 import 'package:sqflite_sample/model/dog.dart';
 import 'dart:math' as math;
 
@@ -52,25 +53,25 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var _dogs = <Dog>[];
-  final _databaseProvider = DatabaseProvider.shared;
-  late DogsRepository _repository;
+  final _repository =
+      DatabaseRepository<DogDao, Dog>(DogDao(), DatabaseProvider.shared);
 
   _addDog() {
     var rand = math.Random();
     var id = _dogs.length + 1;
     var dog = Dog(id, 'Name: ${rand.nextInt(100)}', rand.nextInt(100));
     _repository.insert(dog).then((value) {
-      print('insert ok ${value}');
+      print('Insert ok ${value}');
       _updateDogList();
     });
 
-    _databaseProvider.db().then((db) {
+    DatabaseProvider.shared.db().then((db) {
       print(db.path);
     });
   }
 
   _updateDogList() {
-    _repository.getDogs().then((value) {
+    _repository.all().then((value) {
       setState(() {
         _dogs = value.reversed.toList();
       });
@@ -84,7 +85,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _repository = DogsRepository(_databaseProvider);
     _updateDogList();
   }
 
