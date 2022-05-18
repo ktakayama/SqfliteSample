@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite_sample/database/database_provider.dart';
-import 'package:sqflite_sample/database/database_repository.dart';
 import 'package:sqflite_sample/model/dog.dart';
+import 'package:sqflite_sample/model/cat.dart';
 import 'dart:math' as math;
 
 void main() {
@@ -53,15 +53,23 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var _dogs = <Dog>[];
-  final _repository = DogRepository(DatabaseProvider.shared);
+  var _cats = <Cat>[];
+  final _dogRepo = DogRepository(DatabaseProvider.shared);
+  final _catRepo = CatRepository(DatabaseProvider.shared);
 
   _addDog() {
     var rand = math.Random();
     var id = _dogs.length + 1;
-    var dog = Dog(id, 'Name: ${rand.nextInt(100)}', rand.nextInt(100));
-    _repository.insert(dog).then((value) {
-      print('Insert ok ${value}');
+    var dog = Dog(id, 'Dog Name: ${rand.nextInt(100)}', rand.nextInt(100));
+    _dogRepo.insert(dog).then((value) {
+      print('Insert dog ${value}');
       _updateDogList();
+    });
+
+    var cat = Cat(id, 'Cat Name: ${rand.nextInt(100)}', rand.nextInt(100));
+    _catRepo.insert(cat).then((value) {
+      print('Insert cat ${value}');
+      _updateCatList();
     });
 
     DatabaseProvider.shared.db().then((db) {
@@ -70,15 +78,27 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _updateDogList() {
-    _repository.all().then((value) {
+    _dogRepo.all().then((value) {
       setState(() {
         _dogs = value.reversed.toList();
       });
     });
   }
 
-  ListTile _tile(Dog dog) {
+  _updateCatList() {
+    _catRepo.all().then((value) {
+      setState(() {
+        _cats = value.reversed.toList();
+      });
+    });
+  }
+
+  ListTile _dogTile(Dog dog) {
     return ListTile(title: Text(dog.name), subtitle: Text('age: ${dog.age}'));
+  }
+
+  ListTile _catTile(Cat cat) {
+    return ListTile(title: Text(cat.name), subtitle: Text('age: ${cat.age}'));
   }
 
   @override
@@ -93,10 +113,20 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-          child: ListView.builder(
-              itemBuilder: (context, i) => _tile(_dogs[i]),
-              itemCount: _dogs.length)),
+      body: Row(
+        children: [
+          SizedBox(
+              width: 150,
+              child: ListView.builder(
+                  itemBuilder: (context, i) => _dogTile(_dogs[i]),
+                  itemCount: _dogs.length)),
+          SizedBox(
+              width: 150,
+              child: ListView.builder(
+                  itemBuilder: (context, i) => _catTile(_cats[i]),
+                  itemCount: _cats.length)),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addDog,
         tooltip: 'Increment',
